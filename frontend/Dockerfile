@@ -1,9 +1,10 @@
-FROM node:24-bookworm-slim
+FROM node:24-alpine
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci
+# Install dependencies and immediately purge npm download cache to minimize image size
+RUN npm ci && npm cache clean --force
 
 EXPOSE 3000
 

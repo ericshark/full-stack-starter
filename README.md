@@ -115,36 +115,30 @@ An **Agentic Template** is engineered so that autonomous AI coding assistants ca
 - **Docker & Docker Compose**: For containerized database and services
 - **Make**: Standard build tool
 
-### 1. Environment Configuration
-Copy the example environment file:
+### 1. Automated Setup (One Command)
+Run the single setup command to initialize environment files, install all dependencies (Python `uv` + Node.js `npm`), and generate initial TypeScript API definitions:
 ```bash
-cp .env.example .env
+make setup
 ```
 
-### 2. Install Dependencies & Generate Types
+### 2. Run the Stack
+
+#### Option A: Docker (First-Time Run)
+If running Docker for the first time, use `docker-init` to automatically build the images, wait for PostgreSQL to become healthy, run database migrations, and seed initial records:
 ```bash
-# Install backend dependencies
-cd backend && uv sync && cd ..
-
-# Install frontend dependencies
-cd frontend && npm install && cd ..
-
-# Generate initial OpenAPI TypeScript types
-make codegen
-```
-
-### 3. Run the Stack
-
-#### Option A: Docker Compose (All-in-One)
-```bash
-make dev
+make docker-init
 ```
 - Frontend: [http://localhost:3000](http://localhost:3000)
 - Backend API Docs: [http://localhost:8000/api/v1/docs](http://localhost:8000/api/v1/docs)
 - PostgreSQL: `localhost:5432`
 
+For subsequent runs, simply use:
+```bash
+make dev
+```
+
 #### Option B: Local Standalone Development
-1. Start PostgreSQL:
+1. Start PostgreSQL container:
    ```bash
    docker compose up -d db
    ```
@@ -173,6 +167,8 @@ All key tasks are unified at the repository root:
 
 | Command | Description |
 | :--- | :--- |
+| `make setup` | **One-step setup**: creates `.env`, installs dependencies (uv + npm), and runs codegen |
+| `make docker-init` | **First-time Docker run**: builds, waits for DB health, runs migrations, and seeds data |
 | `make check` | **Runs the entire verification suite** (Ruff, ESLint, Mypy, TypeScript, Pytest, Vitest) |
 | `make codegen` | Headlessly exports `openapi.json` from FastAPI and generates `api.d.ts` in Next.js |
 | `make test` | Runs backend tests (`pytest`) and frontend tests (`vitest`) |

@@ -24,6 +24,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-app}@db:5432/${POSTGRES_DB:-app}
     volumes:
       - ./backend:/app
+      - backend_venv:/app/.venv
     depends_on:
       db:
         condition: service_healthy
@@ -46,4 +47,5 @@ services:
 
 volumes:
   frontend_node_modules:
+  backend_venv:
   postgres_data:

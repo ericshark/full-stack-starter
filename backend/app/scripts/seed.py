@@ -29,9 +29,9 @@ DEMO_ITEMS = [
 async def seed() -> None:
     """Seed the database with initial demo records if table is empty."""
     async with async_session_maker() as session:
-        result = await session.execute(select(Item).limit(1))
-        existing = result.scalars().first()
-        
+        result = await session.exec(select(Item).limit(1))
+        existing = result.first()
+
         if existing:
             print("Database already contains items. Skipping seed.")
             return

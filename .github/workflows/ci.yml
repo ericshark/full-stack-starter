@@ -1,0 +1,75 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  backend-checks:
+    name: Backend Lint, Typecheck & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python 3.12
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: uv sync --locked
+
+      - name: Run Ruff Lint
+        working-directory: ./backend
+        run: uv run ruff check .
+
+      - name: Run Mypy Typecheck
+        working-directory: ./backend
+        run: uv run mypy app
+
+      - name: Run Pytest
+        working-directory: ./backend
+        run: uv run pytest
+
+  frontend-checks:
+    name: Frontend Lint, Typecheck & Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Run TypeScript Typecheck
+        working-directory: ./frontend
+        run: npm run typecheck
+
+      - name: Run Vitest
+        working-directory: ./frontend
+        run: npm run test
+
+      - name: Build Next.js App
+        working-directory: ./frontend
+        run: npm run build

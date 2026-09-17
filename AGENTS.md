@@ -91,6 +91,10 @@ For step-by-step procedures, refer to the specialized agent skills in `.agents/s
 - **`create-db-migration`**: Runbook for creating, inspecting, and running Alembic database migrations.
 - **`full-check`**: Diagnostic guide for diagnosing and fixing lint, type, or test failures.
 
+## Documentation
+
+Use `docs/` for persistent architectural and subsystem knowledge. Before modifying a subsystem, check for relevant documentation there. When a change materially alters architecture, data flow, public APIs, important invariants, setup, or behavior that future developers or agents need to understand, update the relevant existing documentation. Create a new document only for a substantial new subsystem or concept that does not fit existing documentation. Do not document trivial implementation changes, routine bug fixes, or information already obvious from the code.
+
 ## Change tracking
 
 After a non-trivial change (new feature, bug fix, schema change,

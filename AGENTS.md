@@ -90,3 +90,13 @@ For step-by-step procedures, refer to the specialized agent skills in `.agents/s
 - **`add-api-endpoint`**: Runbook for creating a FastAPI endpoint, testing it, syncing types, and consuming it on the frontend.
 - **`create-db-migration`**: Runbook for creating, inspecting, and running Alembic database migrations.
 - **`full-check`**: Diagnostic guide for diagnosing and fixing lint, type, or test failures.
+
+## Change tracking
+
+After a non-trivial change (new feature, bug fix, schema change,
+or a real design decision — not renames, formatting, or refactors
+with no behavior change), append one line to docs/CHANGES.md:
+
+date — summary — files — status — follow-up (if any)
+
+Trivial changes: skip silently, no log, no comment.

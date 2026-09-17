@@ -1,95 +1,62 @@
-# Agent & Developer Guidelines: Next.js + FastAPI Full-Stack Template
+# Agent Guidelines
 
-Welcome to the Next.js + FastAPI Agentic Full-Stack Template. This document is the primary steering guide for AI coding agents (and human developers) working in this repository. Follow these instructions strictly to maintain architectural integrity, end-to-end type safety, and fast automated feedback loops.
+This file defines the shared instructions for coding agents working in this repository.
 
----
+## Project
 
-## 1. System Topology & Monorepo Structure
+Full-stack application using:
 
-```
-.
-├── Makefile                     # Universal command interface for agents & devs
-├── docker-compose.yml           # PostgreSQL 17, FastAPI backend, Next.js frontend
-├── docs/architecture/           # High-signal architecture specifications
-├── .agents/skills/              # Reusable agent runbooks (add endpoint, migrations, check)
-├── backend/                     # Python 3.12+ FastAPI backend (managed with uv)
-│   ├── pyproject.toml           # Dependencies, tool configs (ruff, mypy, pytest)
-│   ├── alembic/                 # Database migrations (async SQLAlchemy/SQLModel)
-│   ├── app/
-│   │   ├── core/                # Settings (pydantic-settings), DB session & engine
-│   │   ├── models/              # SQLModel database tables
-│   │   ├── schemas/             # Pydantic request/response validation schemas
-│   │   ├── api/v1/              # Versioned API routes
-│   │   └── scripts/             # OpenAPI export, seed scripts
-│   └── tests/                   # Pytest test suite (unit + async API integration)
-└── frontend/                    # Next.js 16 (App Router) + React 19 + Tailwind v4 (npm)
-    ├── package.json             # Scripts: dev, build, lint, typecheck, test, codegen
-    ├── src/
-    │   ├── app/                 # App Router pages and layouts
-    │   ├── components/          # Reusable UI & feature components
-    │   └── lib/                 # Typed API client (`openapi-fetch`), env validation
-    └── tests/                   # Vitest component & unit tests
-```
+- Next.js 16 and React 19
+- TypeScript and Tailwind CSS v4
+- FastAPI and Python 3.12+
+- SQLModel, Pydantic, and Alembic
+- PostgreSQL
+- Vitest, Testing Library, Pytest, Ruff, and Mypy
 
----
+Important locations:
 
-## 2. Universal Command Cheatsheet
+- `backend/app/api/` — versioned API routes
+- `backend/app/models/` — SQLModel database tables
+- `backend/app/schemas/` — API request and response schemas
+- `backend/app/core/` — settings, security, and database configuration
+- `backend/alembic/` — database migrations
+- `backend/tests/` — backend tests
+- `frontend/src/app/` — App Router routes and layouts
+- `frontend/src/components/` — application components
+- `frontend/src/lib/` — shared utilities and typed API client
+- `frontend/tests/` — frontend tests
+- `docs/` — architecture and subsystem documentation
 
-Always prefer running commands via `make` from the repository root:
+## Commands
 
-| Task | Command | Description |
-| :--- | :--- | :--- |
-| **One-Step Setup** | `make setup` | Installs dependencies (uv + npm), creates `.env`, runs codegen |
-| **First-Time Docker** | `make docker-init` | Builds containers, waits for DB, runs migrations & seeds |
-| **Verify All** | `make check` | Runs linting, type-checking, and tests for both stacks |
-| **Type Sync** | `make codegen` | Exports OpenAPI schema from FastAPI & generates TypeScript definitions |
-| **Run Tests** | `make test` | Executes `backend` pytest and `frontend` vitest |
-| **Lint Code** | `make lint` | Runs `ruff check` (Python) and `eslint` (TypeScript) |
-| **Type Check** | `make typecheck`| Runs `mypy` (Python) and `tsc --noEmit` (TypeScript) |
-| **Apply DB Migrations** | `make db-migrate` | Runs `alembic upgrade head` |
-| **Seed DB** | `make db-seed` | Seeds database with demo records |
-| **Dev Environment** | `make dev` | Starts Docker Compose (Postgres, backend, frontend) |
+Use the Makefile from the repository root as the primary command interface.
 
-If executing inside subdirectories directly:
-- **Backend**: `cd backend && uv run <tool>` (e.g., `uv run pytest`, `uv run ruff check .`, `uv run mypy app`)
-- **Frontend**: `cd frontend && npm run <script>` (e.g., `npm run test`, `npm run typecheck`, `npm run lint`)
+- `make setup` — install dependencies, create `.env`, and generate API types
+- `make dev` — start the development stack
+- `make docker-init` — initialize Docker services, migrations, and seed data
+- `make codegen` — regenerate TypeScript types from the backend OpenAPI schema
+- `make lint` — run Ruff and ESLint
+- `make typecheck` — run Mypy and TypeScript checks
+- `make test` — run Pytest and Vitest
+- `make check` — run linting, type checking, and tests
+- `make db-migrate` — apply pending database migrations
+- `make db-seed` — seed demo data
 
----
+For focused work, use `uv run <tool>` from `backend/` and `npm run <script>` from `frontend/`.
 
-## 3. Golden Rules for AI Agents
+### API and database changes
 
-1. **End-to-End Type Safety (Zero Drift)**:
-   - When modifying or adding any FastAPI router, model, or schema, **always run `make codegen`**.
-   - Never write loose `fetch("/api/...")` calls or manual TypeScript interfaces for API responses. Use the typed `api` client imported from `@/lib/api`.
+When changing a FastAPI route, model, or schema, run `make codegen` and use the typed client in `frontend/src/lib/api.ts` rather than handwritten API interfaces or untyped fetch calls.
 
-2. **Single-Source Data Models with SQLModel**:
-   - Define database tables using `SQLModel` with `table=True` in `app/models/`.
-   - Define API input/output DTOs using Pydantic / SQLModel schemas in `app/schemas/`.
-   - Never use un-annotated types or raw dictionaries in API endpoints.
+When changing a database model, create and inspect an Alembic migration before running `make db-migrate`. Keep database models, API schemas, and route responsibilities in their respective directories.
 
-3. **Database Migrations are Mandatory**:
-   - Never modify a model without generating an Alembic migration:
-     `cd backend && uv run alembic revision --autogenerate -m "<descriptive_message>"`
-   - Always verify the generated migration script in `backend/alembic/versions/` and test `make db-migrate`.
+### Frontend components
 
-4. **Deterministic Pre-Completion Verification**:
-   - Before completing any task or claiming work is done, run `make check`.
-   - Ensure `ruff check`, `mypy`, `pytest`, `eslint`, `tsc --noEmit`, and `vitest` all pass with zero errors.
+Reuse existing components and UI primitives before creating new ones. Use the existing `cn(...)` utility for conditional Tailwind class composition.
 
-5. **Layered Separation of Concerns**:
-   - `app/api/v1/endpoints/`: Routing, HTTP status codes, dependency injection.
-   - `app/models/`: Database schema definitions.
-   - `app/schemas/`: API contracts, request payloads, response serialization.
-   - `app/core/`: Configuration, security, database connectivity.
+### Testing
 
----
-
-## 4. Progressive Context & Skills
-
-For step-by-step procedures, refer to the specialized agent skills in `.agents/skills/`:
-- **`add-api-endpoint`**: Runbook for creating a FastAPI endpoint, testing it, syncing types, and consuming it on the frontend.
-- **`create-db-migration`**: Runbook for creating, inspecting, and running Alembic database migrations.
-- **`full-check`**: Diagnostic guide for diagnosing and fixing lint, type, or test failures.
+Add or update tests when introducing or changing meaningful behavior. Test observable behavior rather than implementation details. Do not weaken, remove, or bypass tests merely to make verification pass.
 
 ## Documentation
 

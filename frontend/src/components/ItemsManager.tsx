@@ -29,7 +29,9 @@ export function ItemsManager() {
         }
       } catch (err) {
         if (isMounted) {
-          setError(err instanceof Error ? err.message : "Error connecting to backend");
+          setError(
+            err instanceof Error ? err.message : "Error connecting to backend",
+          );
         }
       } finally {
         if (isMounted) {
@@ -99,13 +101,17 @@ export function ItemsManager() {
             CRUD Demonstration (Items)
           </h2>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            End-to-end data flow: React Client → openapi-fetch → FastAPI → SQLModel → PostgreSQL
+            End-to-end data flow: React Client → openapi-fetch → FastAPI →
+            SQLModel → PostgreSQL
           </p>
         </div>
       </div>
 
       {/* Creation Form */}
-      <form onSubmit={handleCreateItem} className="mt-4 flex flex-col sm:flex-row gap-2">
+      <form
+        onSubmit={handleCreateItem}
+        className="mt-4 flex flex-col sm:flex-row gap-2"
+      >
         <input
           type="text"
           placeholder="Item title (e.g. Build authentication)"
@@ -149,7 +155,11 @@ export function ItemsManager() {
           </div>
         ) : items.length === 0 ? (
           <div className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400 border border-dashed border-zinc-200 rounded-lg dark:border-zinc-800">
-            No items in database. Add an item above or run <code className="bg-zinc-100 px-1 py-0.5 rounded text-xs dark:bg-zinc-800">make db-seed</code>.
+            No items in database. Add an item above or run{" "}
+            <code className="bg-zinc-100 px-1 py-0.5 rounded text-xs dark:bg-zinc-800">
+              make db-seed
+            </code>
+            .
           </div>
         ) : (
           items.map((item) => (
@@ -167,7 +177,8 @@ export function ItemsManager() {
                   </div>
                 )}
                 <div className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">
-                  ID: #{item.id} · Created {new Date(item.created_at).toLocaleTimeString()}
+                  ID: #{item.id} · Created{" "}
+                  {new Date(item.created_at).toLocaleTimeString()}
                 </div>
               </div>
               <button

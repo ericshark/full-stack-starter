@@ -7,9 +7,7 @@
   "paths": {
     "/api/v1/health": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "summary": "Check Health",
         "description": "Check API and database health status.",
         "operationId": "check_health_api_v1_health_get",
@@ -29,9 +27,7 @@
     },
     "/api/v1/items": {
       "get": {
-        "tags": [
-          "Items"
-        ],
+        "tags": ["Items"],
         "summary": "List Items",
         "description": "Retrieve a list of items with optional pagination.",
         "operationId": "list_items_api_v1_items_get",
@@ -85,9 +81,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Items"
-        ],
+        "tags": ["Items"],
         "summary": "Create Item",
         "description": "Create a new item.",
         "operationId": "create_item_api_v1_items_post",
@@ -127,9 +121,7 @@
     },
     "/api/v1/items/{item_id}": {
       "get": {
-        "tags": [
-          "Items"
-        ],
+        "tags": ["Items"],
         "summary": "Get Item",
         "description": "Get item details by ID.",
         "operationId": "get_item_api_v1_items__item_id__get",
@@ -168,9 +160,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Items"
-        ],
+        "tags": ["Items"],
         "summary": "Delete Item",
         "description": "Delete an item by ID.",
         "operationId": "delete_item_api_v1_items__item_id__delete",
@@ -234,11 +224,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "status",
-          "database",
-          "environment"
-        ],
+        "required": ["status", "database", "environment"],
         "title": "HealthResponse",
         "description": "Health check payload indicating application and database status."
       },
@@ -264,9 +250,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "title"
-        ],
+        "required": ["title"],
         "title": "ItemCreate",
         "description": "Payload schema for creating a new item."
       },
@@ -301,11 +285,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "title",
-          "id",
-          "created_at"
-        ],
+        "required": ["title", "id", "created_at"],
         "title": "ItemRead",
         "description": "Response schema representing an item."
       },
@@ -342,11 +322,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
+        "required": ["loc", "msg", "type"],
         "title": "ValidationError"
       }
     }

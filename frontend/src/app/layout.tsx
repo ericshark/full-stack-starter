@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Agentic Full-Stack Template | Next.js 16 + FastAPI",
-  description: "Production agentic template with Next.js App Router, FastAPI, and PostgreSQL",
+  description:
+    "Production agentic template with Next.js App Router, FastAPI, and PostgreSQL",
 };
 
 export default function RootLayout({

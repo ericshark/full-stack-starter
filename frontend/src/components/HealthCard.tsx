@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Activity, Database, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+import {
+  Activity,
+  Database,
+  CheckCircle2,
+  AlertCircle,
+  RefreshCw,
+} from "lucide-react";
 import { api } from "@/lib/api";
 
 interface HealthState {
@@ -25,7 +31,9 @@ export function HealthCard() {
         setHealth(data);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to connect to backend");
+      setError(
+        err instanceof Error ? err.message : "Failed to connect to backend",
+      );
     } finally {
       setLoading(false);
     }
@@ -45,7 +53,9 @@ export function HealthCard() {
         }
       } catch (err) {
         if (isMounted) {
-          setError(err instanceof Error ? err.message : "Failed to connect to backend");
+          setError(
+            err instanceof Error ? err.message : "Failed to connect to backend",
+          );
         }
       } finally {
         if (isMounted) {
@@ -82,7 +92,9 @@ export function HealthCard() {
           className="flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50 transition-colors disabled:opacity-50"
           aria-label="Refresh health status"
         >
-          <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
+          <RefreshCw
+            className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`}
+          />
           Refresh
         </button>
       </div>
@@ -105,8 +117,8 @@ export function HealthCard() {
               {loading
                 ? "Checking..."
                 : error
-                ? "Offline"
-                : health?.status.toUpperCase() ?? "OFFLINE"}
+                  ? "Offline"
+                  : (health?.status.toUpperCase() ?? "OFFLINE")}
             </div>
           </div>
         </div>
@@ -122,8 +134,8 @@ export function HealthCard() {
               {loading
                 ? "Checking..."
                 : error
-                ? "Unavailable"
-                : health?.database}
+                  ? "Unavailable"
+                  : health?.database}
             </div>
           </div>
         </div>
@@ -131,14 +143,16 @@ export function HealthCard() {
 
       {error && (
         <div className="mt-3 rounded-md bg-rose-50 p-2.5 text-xs text-rose-700 dark:bg-rose-950/50 dark:text-rose-300">
-          {error} — ensure backend is running (`make dev` or `cd backend && uv run uvicorn app.main:app`)
+          {error} — ensure backend is running (`make dev` or `cd backend && uv
+          run uvicorn app.main:app`)
         </div>
       )}
 
       {isHealthy && (
         <div className="mt-3 text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          End-to-end full-stack contract active ({health.environment} environment)
+          End-to-end full-stack contract active ({health.environment}{" "}
+          environment)
         </div>
       )}
     </div>

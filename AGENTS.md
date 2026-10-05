@@ -20,14 +20,19 @@ Use the `Makefile` from the repository root as the primary command interface:
   - `backend/app/schemas/` — Pydantic request and response schemas
   - `backend/alembic/` — Database migrations
   - `backend/tests/` — Pytest test suite
-  - `frontend/src/app/` — Next.js App Router pages and layouts
+  - `frontend/src/app/` — Next.js App Router pages, layouts, and metadata
   - `frontend/src/components/` — Application components
   - `frontend/src/lib/` — Shared utilities (`cn` in `@/lib/utils`, typed client in `@/lib/api`)
   - `frontend/tests/` — Vitest unit and component tests
+  - `docs/` — System architecture, ADRs, and review logs
 - **Full-Stack Contracts**: When changing an API route, model, or schema, run `make codegen` and use the typed client in `frontend/src/lib/api.ts` rather than untyped fetch calls.
-- **Styling**: Tailwind CSS v4. Use `cn(...)` from `@/lib/utils` for conditional class merging.
+- **Styling**: Tailwind CSS v4. Use `cn(...)` from `@/lib/utils` for conditional class merging. Follow design principles in `docs/design-system.md`.
 - **Testing**: Test observable behavior. Add or update tests when changing behavior, and never bypass tests.
-- **Documentation**: Update `docs/architecture/` when changing architecture, data flow, or core design patterns.
+- **Product Context**: Refer to `PRODUCT.md` for MVP scope, user journeys, and specifications.
+- **Documentation & Tracking**:
+  - **Architecture**: Update `docs/architecture/` when changing architecture, data flow, or core patterns.
+  - **Decisions**: Document significant technical or architectural choices as an ADR under `docs/decisions/` following `docs/decisions/0000-template.md`.
+  - **Review Findings**: Record unexpected gaps, bugs, or oversights in `docs/review-findings.md`.
 
 ## Skills
 

@@ -1,0 +1,19 @@
+# Build outputs and dependencies
+node_modules/
+.next/
+dist/
+build/
+coverage/
+
+# Backend files (formatted with Ruff)
+backend/
+*.py
+
+# Generated code
+frontend/src/lib/types/api.d.ts
+frontend/src/lib/types/openapi.json
+
+# Caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/

@@ -12,6 +12,25 @@ Use the `Makefile` from the repository root as the primary command interface:
 - `make typecheck` — Run backend (Mypy) and frontend (TypeScript) type checks
 - `make setup` — Initial setup (.env, dependencies, codegen)
 
+Run `make help` for the full list.
+
+## Environment
+
+- Backend: Python 3.12 managed with `uv`. Frontend: `npm` and Node.js 24.
+- Required environment variables are listed in `.env.example` (root). Docker Compose overrides `DATABASE_URL` to use the `db` host.
+- Default ports: frontend `3000`, backend `8000`, PostgreSQL `5432`. Backend `CORS_ORIGINS` must include the frontend's origin; the defaults allow ports `3000` and `3001`.
+- Next.js 16 has breaking changes from older versions; see `frontend/AGENTS.md`.
+
+## Database Migrations
+
+After changing a model in `backend/app/models/`:
+
+1. `cd backend && uv run alembic revision --autogenerate -m "<description>"`
+2. Review the generated file in `backend/alembic/versions/` before applying it.
+3. `make db-migrate`, then `make codegen` if the API shape changed.
+
+Backend tests run against in-memory SQLite, not PostgreSQL. Verify PostgreSQL-specific behavior (types, constraints, migrations) against the Docker database.
+
 ## Architecture & Code Style
 
 - **Structure**:
@@ -28,7 +47,7 @@ Use the `Makefile` from the repository root as the primary command interface:
 - **Full-Stack Contracts**: When changing an API route, model, or schema, run `make codegen` and use the typed client in `frontend/src/lib/api.ts` rather than untyped fetch calls.
 - **Styling**: Tailwind CSS v4. Use `cn(...)` from `@/lib/utils` for conditional class merging. Follow design principles in `docs/design-system.md`.
 - **Testing**: Test observable behavior. Add or update tests when changing behavior, and never bypass tests.
-- **Product Context**: Refer to `PRODUCT.md` for MVP scope, user journeys, and specifications.
+- **Product Context**: Refer to `PRODUCT.md` for MVP scope, user journeys, and specifications. If it still contains template placeholders, ask rather than treating them as requirements.
 - **Documentation & Tracking**:
   - **Architecture**: Update `docs/architecture/` when changing architecture, data flow, or core patterns.
   - **Decisions**: Document significant technical or architectural choices as an ADR under `docs/decisions/` following `docs/decisions/0000-template.md`.
@@ -36,6 +55,6 @@ Use the `Makefile` from the repository root as the primary command interface:
 
 ## Skills
 
-Reusable procedures are stored in `.agents/skills/`.
+Reusable procedures are stored in `.agents/skills/` (none yet; `.claude/skills` links here).
 
 When a task matches an existing skill, follow that skill rather than recreating the procedure here.

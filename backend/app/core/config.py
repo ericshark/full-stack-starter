@@ -6,12 +6,13 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "FastAPI Next.js Agentic App"
     API_V1_STR: str = "/api/v1"
-    
+
     # PostgreSQL connection string (defaults to local docker postgres)
     DATABASE_URL: str = "postgresql+asyncpg://app:app@localhost:5432/app"
-    
-    # Allowed origins for CORS (default includes Next.js local dev server)
-    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+
+    # Allowed origins for CORS (Next.js dev server on its default port and on
+    # port 3001, which agents use to avoid clashing with the default)
+    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:3001"]
 
     # Environment mode (development, test, production)
     ENVIRONMENT: str = "development"
